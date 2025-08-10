@@ -17,6 +17,6 @@ app.use("/api/v1",routes);
 const db_connect = require("./config/connection");
 db_connect();
 
-app.listen(PORT,(req,res) => {
+app.listen(PORT,() => {
     console.log(`app started at ${PORT}`);
 });
