@@ -3,7 +3,15 @@ const app = express();
 const cors = require("cors");
 //middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL, 
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
 
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +25,6 @@ app.use("/api/v1",routes);
 const db_connect = require("./config/connection");
 db_connect();
 
-app.listen(PORT,() => {
+app.listen(PORT,(req,res) => {
     console.log(`app started at ${PORT}`);
 });
