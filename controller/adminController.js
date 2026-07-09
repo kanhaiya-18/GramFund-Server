@@ -1,6 +1,8 @@
 const admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookie = require("cookie-parser");
+const { options } = require("../routes/fundRoutes");
 require("dotenv").config();
 exports.login = async (req, res) => {
     try {
@@ -34,12 +36,31 @@ exports.login = async (req, res) => {
         }
         //jwt creation (token)
         const token = jwt.sign(payload, process.env.SECRET_KEY, {
-            expiresIn: "10min"
+            expiresIn: "100min"
+        });
+        res.cookie("token", token, { httpOnly: true, sameSite: "strict", maxAge: 100 * 60 * 1000 })
+        res.status(200).json({
+            success: true,
+            message: "logged in successfully"
+        });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+exports.logout = async (req, res) => {
+    try {
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "Strict",
         });
         res.status(200).json({
             success: true,
-            token,
-            message: "logged in successfully"
+            message: "Logged out successfully",
         });
     }
     catch (err) {

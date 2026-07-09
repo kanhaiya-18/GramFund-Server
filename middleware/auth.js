@@ -5,11 +5,12 @@ require("dotenv").config();
 exports.auth = async (req, res, next) => {
     try {
         //extract token
-        const token = req.body.token || req.header("Authorization").replace("Bearer ", "");
+        // const token = req.body.token || req.header("Authorization").replace("Bearer ", "");
+        const token = req.cookies?.token;
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: "couldn't fetch token"
+                message: "invalid token"
             });
         }
         //verify the token
@@ -19,7 +20,7 @@ exports.auth = async (req, res, next) => {
     }
     catch (err) {
         console.error(err);
-        return res.status(403).json({
+        return res.status(401).json({
             success: false,
             message: "Invalid token. Access denied"
         });
