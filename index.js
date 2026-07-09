@@ -5,15 +5,15 @@ const cookieParser = require("cookie-parser");
 //middlewares
 app.use(express.json());
 app.use(cookieParser())
+// app.use(cors({origin: "http://localhost:3000",credentials: true}))
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", 
+  origin: process.env.FRONTEND_URL, 
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  credentials: true
 }));
 
 require("dotenv").config();
